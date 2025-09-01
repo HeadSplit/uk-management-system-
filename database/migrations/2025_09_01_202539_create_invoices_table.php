@@ -13,6 +13,17 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('apartment_id');
+            $table->foreign('apartment_id')
+                ->references('id')
+                ->on('apartments')
+                ->onDelete('cascade');
+
+            $table->decimal('total_amount', 10, 2);
+            $table->date('period');
+            $table->enum('status', ['unpaid', 'paid'])->default('unpaid');
+
             $table->timestamps();
         });
     }

@@ -1,4 +1,4 @@
-FROM php:8.3-fpm
+FROM php:8.2-fpm
 
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -26,4 +26,5 @@ RUN composer install --no-dev --optimize-autoloader
 
 LABEL authors="P1ll0w"
 
-ENTRYPOINT ["top", "-b"]
+CMD ["php-fpm"]
+
