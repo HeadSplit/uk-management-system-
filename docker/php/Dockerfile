@@ -23,6 +23,7 @@ WORKDIR /var/www
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
+RUN composer require barryvdh/laravel-dompdf
 
 LABEL authors="P1ll0w"
 
