@@ -15,6 +15,7 @@ services:
             PHP_OPCACHE_VALIDATE_TIMESTAMPS: 1
         networks:
             - laravel
+        restart: unless-stopped
 
     nginx:
         image: nginx:alpine
