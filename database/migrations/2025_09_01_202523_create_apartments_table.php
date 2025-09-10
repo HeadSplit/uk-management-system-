@@ -18,6 +18,11 @@ return new class extends Migration
             ->references('id')
             ->on('houses')
             ->onDelete('cascade');
+            $table->unsignedInteger('user_id')->nullable();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
             $table->integer('number');
             $table->decimal('area', 8, 2);
             $table->timestamps();

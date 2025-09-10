@@ -1,76 +1,80 @@
 @extends('layouts.index')
 @section('content')
-    <body class="bg-gray-100">
 
-    <div class="min-h-screen flex flex-col justify-center items-center">
-        <h1 class="text-3xl font-bold mb-8">Добро пожаловать в УК</h1>
-
-        <div class="flex space-x-4">
-            <button @click="openLogin = true" class="px-6 py-2 bg-blue-600 text-white rounded-lg">Войти</button>
-            <button @click="openRegister = true" class="px-6 py-2 bg-green-600 text-white rounded-lg">Регистрация</button>
-        </div>
-    </div>
-
-    <!-- Контейнер Alpine -->
-    <div x-data="{ openLogin: false, openRegister: false }">
-
-        <!-- Модалка входа -->
-        <div x-show="openLogin"
-             class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div @click.away="openLogin = false" class="bg-white p-6 rounded-xl w-96">
-                <h2 class="text-xl font-semibold mb-4">Вход</h2>
-                <form method="POST" action="{{ route('login') }}">
-                    @csrf
-                    <div class="mb-3">
-                        <label class="block text-sm">Email</label>
-                        <input type="email" name="email" required
-                               class="w-full border rounded px-3 py-2">
+    <!-- Слайдер -->
+    <div class="bg-white rounded-2xl shadow p-8">
+        <div class="relative w-full overflow-hidden rounded-2xl shadow-lg mb-6">
+            <div id="homeSwiper" class="flex transition-transform duration-700 ease-in-out">
+                <div class="flex-shrink-0 w-full relative">
+                    <img src="{{asset('images/house1.png')}}" alt="Дом 1" class="w-full h-64 object-cover rounded-2xl">
+                    <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+                        <h2 class="text-3xl text-white font-bold text-center px-4">Ваш комфорт — наша забота</h2>
                     </div>
-                    <div class="mb-3">
-                        <label class="block text-sm">Пароль</label>
-                        <input type="password" name="password" required
-                               class="w-full border rounded px-3 py-2">
+                </div>
+                <div class="flex-shrink-0 w-full relative">
+                    <img src="{{asset('images/house2.png')}}" alt="Дом 2" class="w-full h-64 object-cover rounded-2xl">
+                    <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+                        <h2 class="text-3xl text-white font-bold text-center px-4">Уютные квартиры для вашей семьи</h2>
                     </div>
-                    <div class="flex items-center mb-3">
-                        <input type="checkbox" name="remember_me" id="remember"
-                               class="mr-2">
-                        <label for="remember">Запомнить меня</label>
+                </div>
+                <div class="flex-shrink-0 w-full relative">
+                    <img src="{{asset('images/house3.png')}}" alt="Дом 3" class="w-full h-64 object-cover rounded-2xl">
+                    <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+                        <h2 class="text-3xl text-white font-bold text-center px-4">Пространство для жизни и отдыха</h2>
                     </div>
-                    <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg">Войти</button>
-                </form>
+                </div>
             </div>
+
+            <!-- Навигация (стрелки) -->
+            <button id="prevSlide" class="absolute left-4 top-1/2 -translate-y-1/2 bg-gray-100/70 hover:bg-gray-200 rounded-full p-2 shadow">❮</button>
+            <button id="nextSlide" class="absolute right-4 top-1/2 -translate-y-1/2 bg-gray-100/70 hover:bg-gray-200 rounded-full p-2 shadow">❯</button>
         </div>
 
-        <!-- Модалка регистрации -->
-        <div x-show="openRegister"
-             class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div @click.away="openRegister = false" class="bg-white p-6 rounded-xl w-96">
-                <h2 class="text-xl font-semibold mb-4">Регистрация</h2>
-                <form method="POST" action="{{ route('register') }}">
-                    @csrf
-                    <div class="mb-3">
-                        <label class="block text-sm">Имя</label>
-                        <input type="text" name="name" required
-                               class="w-full border rounded px-3 py-2">
-                    </div>
-                    <div class="mb-3">
-                        <label class="block text-sm">Email</label>
-                        <input type="email" name="email" required
-                               class="w-full border rounded px-3 py-2">
-                    </div>
-                    <div class="mb-3">
-                        <label class="block text-sm">Пароль</label>
-                        <input type="password" name="password" required
-                               class="w-full border rounded px-3 py-2">
-                    </div>
-                    <div class="mb-3">
-                        <label class="block text-sm">Подтверждение пароля</label>
-                        <input type="password" name="password_confirmation" required
-                               class="w-full border rounded px-3 py-2">
-                    </div>
-                    <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg">Зарегистрироваться</button>
-                </form>
-            </div>
+        <script>
+            const swiper = document.getElementById('homeSwiper');
+            const slides = swiper.children;
+            let index = 0;
+            const total = slides.length;
+
+            function showSlide(i) {
+                swiper.style.transform = `translateX(-${i * 100}%)`;
+            }
+
+            function nextSlide() {
+                index = (index + 1) % total;
+                showSlide(index);
+            }
+
+            function prevSlide() {
+                index = (index - 1 + total) % total;
+                showSlide(index);
+            }
+
+            document.getElementById('nextSlide').addEventListener('click', nextSlide);
+            document.getElementById('prevSlide').addEventListener('click', prevSlide);
+
+            setInterval(nextSlide, 5000);
+        </script>
+
+        <!-- Блок под слайдером -->
+        <div class="bg-gray-50 rounded-xl shadow p-6 mt-6 text-center">
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">Добро пожаловать в УК "Комфорт"</h3>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                УК “Комфорт” заботится о вашем доме и квартире. Уют, порядок и надёжность — наша главная цель.
+                Мы делаем жизнь жильцов проще и комфортнее каждый день.
+            </p>
         </div>
+
+        <!-- Блок "О нас" -->
+        <div class="mt-10 bg-gray-50 rounded-xl shadow p-6 max-w-4xl mx-auto text-center">
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">Немного о компании</h3>
+            <p class="text-gray-600 text-lg leading-relaxed">
+                УК "Комфорт" работает на рынке недвижимости более 10 лет, обеспечивая жильцам
+                надежное и качественное обслуживание домов и квартир. Мы заботимся о комфорте,
+                безопасности и уюте каждого жителя, постоянно улучшая наши услуги и внедряя
+                современные технологии управления жилыми комплексами.
+            </p>
+        </div>
+
     </div>
 @endsection

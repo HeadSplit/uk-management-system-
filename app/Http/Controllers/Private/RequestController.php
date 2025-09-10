@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Private;
 
 use App\Helpers\NotificationHelper;
 use App\Http\Controllers\Controller;
-use App\Models\RequestModel;
+use App\Models\Request as RequestModel;
 use App\Services\RequestService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

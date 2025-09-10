@@ -13,21 +13,14 @@
         <h1 class="text-2xl font-bold tracking-wide text-gray-700">УК "Комфорт"</h1>
         <div class="space-x-4 flex items-center">
             <a href="{{ route('index') }}" class="hover:text-gray-600 transition">Главная</a>
-            <a href="{{route('about')}}" class="hover:text-gray-600 transition">О компании</a>
-            <a href="{{route('contact')}}" class="hover:text-gray-600 transition">Контакты</a>
+            <a href="#" class="hover:text-gray-600 transition">О компании</a>
+            <a href="#" class="hover:text-gray-600 transition">Контакты</a>
             @guest()
                 <button onclick="openModal('loginModal')" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-xl shadow hover:bg-gray-300 transition">Вход</button>
                 <button onclick="openModal('registerModal')" class="bg-gray-800 text-white px-4 py-2 rounded-xl shadow hover:bg-gray-900 transition">Регистрация</button>
             @endguest
             @auth
                 <a href="{{route('personal')}}" class="hover:text-gray-600">Личный кабинет</a>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition">
-                        Выйти
-                    </button>
-                </form>
-
             @endauth
         </div>
     </div>
@@ -37,22 +30,22 @@
     <!-- Боковое меню -->
     <aside class="w-64 bg-white border-r shadow-sm hidden md:block">
         <nav class="p-6 space-y-3">
-            @if(auth()->check() && in_array(auth()->user()->role, ['employee', 'admin']))
-                <a href="{{route('users')}}" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">👥 Жильцы</a>
-            @endif
-            @if(auth()->check())
-                <a href="{{route('houses')}}" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition">🏠 Дома</a>
-                <a href="{{route('apartments')}}" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">🏢 Квартиры</a>
-                <a href="{{route('invoices')}}" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">📑 Счета</a>
-                <a href="{{route('requests')}}" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">🛠️ Заявки</a>
-            @endif
+            <a href="#" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition">🏠 Дома</a>
+            <a href="#" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">🏢 Квартиры</a>
+            <a href="#" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">👥 Жильцы</a>
+            <a href="#" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">📑 Счета</a>
+            <a href="#" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">🛠️ Заявки</a>
         </nav>
     </aside>
 
-
     <!-- Контент -->
     <main class="flex-1 p-8">
-        @yield('content')
+        <div class="bg-white rounded-2xl shadow p-8">
+            <h2 class="text-2xl font-semibold mb-6">@yield('title', 'Панель управления')</h2>
+            <div>
+                @yield('content')
+            </div>
+        </div>
     </main>
 </div>
 
