@@ -34,7 +34,7 @@ services:
         container_name: postgres
         restart: always
         environment:
-            POSTGRES_DB: aval
+            POSTGRES_DB: uk-management
             POSTGRES_USER: admin
             POSTGRES_PASSWORD: admin
         ports:
