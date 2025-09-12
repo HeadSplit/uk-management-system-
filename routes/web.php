@@ -36,7 +36,17 @@ Route::group([], function() {
         Route::get('/houses', [UserController::class, 'showHouses'])->name('houses');
         Route::get('/apartments', [UserController::class, 'showApartments'])->name('apartments');
         Route::get('/users', [UserController::class, 'showUsers'])->name('users');
+
+        Route::middleware('can:admin')->group(function () {
+            Route::get('/users/edit/{user}', [UserController::class, 'edit'])->name('users.edit');
+
+            Route::put('/users/update/{user}', [UserController::class, 'update'])->name('users.update');
+            Route::post('/users/delete/{user}', [UserController::class, 'destroy'])->name('users.delete');
+
+        });
     });
+
+
 });
 
 Route::group([], function() {

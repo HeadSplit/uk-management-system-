@@ -32,7 +32,22 @@
         </div>
     </div>
 </header>
-
+<!-- Flash уведомления -->
+@if(session('flash_message'))
+    <div id="flashMessage" class="fixed top-24 right-6 z-50 w-96 p-4 rounded-lg shadow-md text-white
+        {{ session('flash_type') === 'error' ? 'bg-red-500' : 'bg-green-500' }} transition-all duration-500">
+        {{ session('flash_message') }}
+    </div>
+    <script>
+        setTimeout(() => {
+            const msg = document.getElementById('flashMessage');
+            if(msg){
+                msg.classList.add('opacity-0', 'translate-y-[-20px]');
+                setTimeout(() => msg.remove(), 500);
+            }
+        }, 4000);
+    </script>
+@endif
 <div class="flex flex-1">
     <!-- Боковое меню -->
     <aside class="w-64 bg-white border-r shadow-sm hidden md:block">

@@ -36,7 +36,7 @@ class HouseController extends Controller
 
     public function edit(House $house): View
     {
-        return view('private.house.edit', compact('house'));
+        return view('edit.houses', compact('house'));
     }
 
     public function update(Request $request, House $house): RedirectResponse

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Private;
 use App\Helpers\NotificationHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Apartment;
+use App\Models\House;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -36,7 +37,9 @@ class ApartmentController extends Controller
 
     public function edit(Apartment $apartment): View
     {
-        return view('private.apartment.edit', compact('apartment'));
+        $houses = House::all();
+
+        return view('edit.apartments', compact('apartment', 'houses'));
     }
 
     public function update(Request $request, Apartment $apartment): RedirectResponse

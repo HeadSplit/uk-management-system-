@@ -40,7 +40,10 @@ class UserController extends Controller
 
     public function edit(User $user): View
     {
-        return view('private.user.edit', compact('user'));
+        $houses = House::all();
+        $apartments = Apartment::all();
+
+        return view('edit.users', compact('user', 'houses', 'apartments'));
     }
 
     public function update(Request $request, User $user): RedirectResponse
@@ -52,7 +55,7 @@ class UserController extends Controller
             NotificationHelper::flash('Не удалось обновить пользователя', 'error');
         }
 
-        return redirect()->route('user.edit', $user->id);
+        return redirect()->route('users', $user);
     }
 
     public function destroy(User $user): RedirectResponse

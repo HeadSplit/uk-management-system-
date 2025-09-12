@@ -25,7 +25,7 @@
                             <td class="px-6 py-4 text-sm text-gray-700">{{ $apartment->id }}</td>
                             <td class="px-6 py-4 text-sm text-gray-700">{{ $apartment->number }}</td>
                             <td class="px-6 py-4 text-sm text-gray-700">{{ $apartment->house->name ?? '-' }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-700">{{ $apartment->users->count() }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-700">{{ $apartment->user->count() }}</td>
                         </tr>
                     @endforeach
                     </tbody>
