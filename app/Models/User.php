@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -35,6 +36,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public const ROLES = [
+        'resident' => 'Пользователь',
+        'employee' => 'Работник',
+        'admin' => 'Администратор',
+    ];
     /**
      * The attributes that should be cast.
      *

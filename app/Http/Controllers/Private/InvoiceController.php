@@ -31,20 +31,29 @@ class InvoiceController extends Controller
     public function show(Invoice $invoice): View
     {
         $invoice->load('items');
-        return view('private.invoice.show', compact('invoice'));
+        return view('pages.invoices', compact('invoice'));
     }
 
-    public function createInvoice(int $apartmentId, string $period): RedirectResponse
+    public function createInvoice(Request $request, int $apartmentId): RedirectResponse
     {
+        $period = $request->input('period', now()->format('Y-m'));
+
+        $consumption = [
+            'cold_water'  => $request->input('cold_water', 0),
+            'hot_water'   => $request->input('hot_water', 0),
+            'electricity' => $request->input('electricity', 0),
+        ];
+
         try {
-            $this->billingService->createInvoice($apartmentId, $period);
+            $this->billingService->createInvoice($apartmentId, $period, $consumption);
             NotificationHelper::flash('Счет успешно создан');
         } catch (\Exception $exception) {
-            NotificationHelper::flash('Не удалось создать счет', 'error');
+            NotificationHelper::flash('Не удалось создать счет: ' . $exception->getMessage(), 'error');
         }
 
-        return redirect()->back();
+        return redirect()->route('invoices'); 
     }
+
 
     public function downloadPdf(Invoice $invoice): RedirectResponse
     {

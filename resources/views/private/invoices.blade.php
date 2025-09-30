@@ -35,10 +35,17 @@
                                     <span class="px-2 py-1 bg-red-200 text-red-800 rounded-full text-xs font-semibold">Не оплачен</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-700">
-                                <a href="{{ route('invoices.downloadPdf', $invoice) }}" class="px-3 py-1 bg-gray-800 text-white rounded hover:bg-gray-700 transition">
+                            <td class="px-6 py-4 text-sm text-gray-700 space-x-2">
+                                <a href="{{ route('invoices.download', $invoice) }}"
+                                   class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition">
                                     Скачать PDF
                                 </a>
+                                @if(auth()->user()->role == 'employee' || auth()->user()->role == 'admin')
+                                    <a href="{{ route('invoices.delete', $invoice->apartment_id) }}"
+                                       class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition">
+                                        Удалить
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

@@ -10,8 +10,14 @@ class House extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'address',
+    ];
+
     public function apartments(): HasMany
     {
         return $this->hasMany(Apartment::class);
     }
+
 }

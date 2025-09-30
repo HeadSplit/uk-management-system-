@@ -6,6 +6,7 @@ use App\Helpers\NotificationHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Apartment;
 use App\Models\House;
+use App\Services\BillingService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -51,7 +52,7 @@ class ApartmentController extends Controller
             NotificationHelper::flash('Не удалось обновить', 'error');
         }
 
-        return redirect()->route('apartment.edit', $apartment->id);
+        return redirect()->route('apartments.edit', $apartment->id);
     }
 
     public function destroy(Apartment $apartment): RedirectResponse
@@ -64,5 +65,61 @@ class ApartmentController extends Controller
         }
 
         return redirect()->route('apartment.index');
+    }
+
+    public function detachUser(Request $request)
+    {
+        $apartment = Apartment::find($request->apartment_id);
+        if (!$apartment) return redirect()->back();
+
+        $userId = (int)$request->user_id;
+        $residents = $apartment->residents ?? [];
+        $residents = array_map('intval', $residents);
+
+        if (($key = array_search($userId, $residents, true)) !== false) {
+            unset($residents[$key]);
+            $apartment->residents = array_values($residents);
+            $apartment->save();
+            NotificationHelper::flash('Жилец удален из квартиры');
+        }
+
+        return redirect()->back();
+    }
+
+
+    public function storeResident(Request $request)
+    {
+        $apartment = Apartment::find($request->apartment_id);
+        if (!$apartment) {
+            return redirect()->back();
+        }
+
+        $residents = $apartment->residents ?? [];
+
+        if (!in_array($request->user_id, $residents)) {
+            $residents[] = $request->user_id;
+            $apartment->residents = $residents;
+            $apartment->save();
+        }
+
+        NotificationHelper::flash('Жилец успешно добавлен');
+
+        return redirect()->back();
+    }
+
+    public function showSendMetricsForm(Apartment $apartment)
+    {
+        return view('pages.metrics', compact('apartment'));
+    }
+
+    public function sendMetrics(Request $request, Apartment $apartment, BillingService $billingService)
+    {
+        $consumption = $request->only(['cold_water', 'hot_water', 'electricity']);
+        $period = $request->input('period');
+
+        $billingService->createInvoice($apartment->id, $period, $consumption);
+
+        NotificationHelper::flash('Показатели успешно переданы');
+        return redirect()->route('invoices');
     }
 }

@@ -60,6 +60,7 @@
                 <a href="{{route('apartments')}}" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">🏢 Квартиры</a>
                 <a href="{{route('invoices')}}" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">📑 Счета</a>
                 <a href="{{route('requests')}}" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">🛠️ Заявки</a>
+                    <a href="{{route('services')}}" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">⚙️ Услуги</a>
             @endif
         </nav>
     </aside>

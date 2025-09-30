@@ -3,10 +3,9 @@
 @section('title', 'Жильцы')
 
 @section('content')
-    <div class="flex flex-col space-y-6">
-        <div class="flex items-center justify-between">
-            <h2 class="text-2xl font-semibold text-gray-800">Жильцы</h2>
-        </div>
+    <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-semibold text-gray-800">Жильцы</h2>
+    </div>
 
 
         @if($users->isEmpty())
@@ -38,7 +37,7 @@
                                 <a href="{{ route('users.edit', $user->id) }}" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 transition">Редактировать</a>
                                 <form action="{{ route('users.delete', $user->id) }}" method="POST" class="inline">
                                     @csrf
-                                    @method('PATCH')
+                                    @method('DELETE')
                                     <button type="submit" class="px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600 transition">Удалить</button>
                                 </form>
                             </td>

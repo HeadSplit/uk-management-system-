@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Apartment;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use App\Models\Service;
 use Illuminate\Support\Facades\DB;
 
 class BillingService
@@ -27,37 +28,37 @@ class BillingService
             $invoice = Invoice::create([
                 'apartment_id' => $apartment->id,
                 'period' => $period,
-                'total' => 0,
+                'total_amount' => 0,
+                'status' => 'unpaid',
             ]);
 
             $total = 0;
 
-            $charges = [];
+            $services = [
+                'cold_water' => $consumption['cold_water'] ?? 0,
+                'hot_water' => $consumption['hot_water'] ?? 0,
+                'electricity' => $consumption['electricity'] ?? 0,
+                'heating' => $apartment->area ?? 0,
+                'garbage' => 1,
+                'maintenance' => 1,
+            ];
 
-            $cold = ($consumption['cold_water'] ?? 0) * $this->tariffs['cold_water'];
-            $hot = ($consumption['hot_water'] ?? 0) * $this->tariffs['hot_water'];
-            $charges[] = ['name' => 'Холодная вода', 'amount' => $cold];
-            $charges[] = ['name' => 'Горячая вода', 'amount' => $hot];
+            foreach ($services as $serviceKey => $quantity) {
+                $service = Service::where('key', $serviceKey)->first();
+                if (!$service) continue;
+                $amount = $quantity * $service->tariff;
 
-            $elec = ($consumption['electricity'] ?? 0) * $this->tariffs['electricity'];
-            $charges[] = ['name' => 'Электричество', 'amount' => $elec];
-
-            $heating = ($apartment->area ?? 50) * $this->tariffs['heating'];
-            $charges[] = ['name' => 'Отопление', 'amount' => $heating];
-
-            $charges[] = ['name' => 'Вывоз мусора', 'amount' => $this->tariffs['garbage']];
-            $charges[] = ['name' => 'Содержание квартиры', 'amount' => $this->tariffs['maintenance']];
-
-            foreach ($charges as $charge) {
                 InvoiceItem::create([
                     'invoice_id' => $invoice->id,
-                    'name' => $charge['name'],
-                    'amount' => $charge['amount'],
+                    'service_id' => $service->id,
+                    'quantity' => $quantity ?: null,
+                    'amount' => $amount,
                 ]);
-                $total += $charge['amount'];
+
+                $total += $amount;
             }
 
-            $invoice->update(['total' => $total]);
+            $invoice->update(['total_amount' => $total]);
 
             return $invoice;
         });

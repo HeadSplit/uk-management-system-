@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\NotificationHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRequest;
 use Illuminate\Http\RedirectResponse;
@@ -18,10 +19,10 @@ class AuthController extends Controller
         $remember = $data['remember_me'] ?? false;
 
         if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']], $remember)) {
-            $request->session()->regenerate();
             return redirect()->route('index');
         }
 
+        NotificationHelper::flash('Неверный логин или пароль', 'error');
         return back()->withErrors([
             'email' => 'Неверный логин или пароль',
         ])->onlyInput('email');

@@ -23,7 +23,11 @@ class UserController extends Controller
 
     public function create(): View
     {
-        return view('private.user.create');
+        $houses = House::all();
+        $apartments = Apartment::all();
+        $users = User::all();
+
+        return view('private.users', compact('houses', 'apartments', 'users'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -35,7 +39,7 @@ class UserController extends Controller
             NotificationHelper::flash('Не удалось создать пользователя', 'error');
         }
 
-        return redirect()->route('user.create');
+        return redirect()->route('users.create');
     }
 
     public function edit(User $user): View
@@ -121,13 +125,15 @@ class UserController extends Controller
 
     public function showApartments(): View
     {
+        $users = User::all();
+
         $user = auth()->user();
 
         $apartments = Apartment::when($user->role === 'resident', function ($query) use ($user) {
             $query->where('user_id', $user->id);
         })->get();
 
-        return view('private.apartments', compact('apartments'));
+        return view('private.apartments', compact('apartments', 'users'));
     }
 
     public function showUsers(): View

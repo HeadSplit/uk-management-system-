@@ -20,13 +20,14 @@ return new class extends Migration
                 ->on('invoices')
                 ->onDelete('cascade');
 
-            $table->unsignedBigInteger('service_id');
+            $table->unsignedBigInteger('service_id')->nullable();
             $table->foreign('service_id')
                 ->references('id')
                 ->on('services')
                 ->onDelete('cascade');
 
-            $table->decimal('quantity', 10, 3); 
+            $table->decimal('quantity', 10, 3)->nullable();
+
             $table->decimal('amount', 10, 2);
 
             $table->timestamps();

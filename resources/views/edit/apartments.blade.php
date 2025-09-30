@@ -36,5 +36,28 @@
                 <button type="submit" class="px-4 py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-900 transition">Сохранить</button>
             </div>
         </form>
+
+        <div class="mt-8">
+            <h3 class="text-lg font-semibold mb-2">Жильцы квартиры</h3>
+            @if($apartment->residentsUsers()->isEmpty())
+                <p class="text-gray-500">Жильцов пока нет.</p>
+            @else
+                <ul class="space-y-2">
+                    @foreach($apartment->residentsUsers() as $resident)
+                        <li class="flex justify-between items-center p-2 border rounded">
+                            <span>{{ $resident->name }} ({{ $resident->email }})</span>
+                            <form action="{{ route('apartments.users.detach') }}" method="POST" class="inline">
+                                @csrf
+                                <input type="hidden" name="apartment_id" value="{{ $apartment->id }}">
+                                <input type="hidden" name="user_id" value="{{ $resident->id }}">
+                                <button type="submit" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">
+                                    Удалить
+                                </button>
+                            </form>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+        </div>
     </div>
 @endsection

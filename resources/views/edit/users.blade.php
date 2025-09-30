@@ -26,10 +26,12 @@
 
             <div>
                 <label for="role" class="block text-sm font-medium text-gray-700">Роль</label>
-                <select id="role" name="role"
-                        class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    <option value="user" {{ old('role', $user->role) === 'user' ? 'selected' : '' }}>Пользователь</option>
-                    <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Администратор</option>
+                <select id="role" name="role" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    @foreach(\App\Models\User::ROLES as $value => $label)
+                        <option value="{{ $value }}" {{ old('role', $user->role) === $value ? 'selected' : '' }}>
+                            {{ $label }}
+                        </option>
+                    @endforeach
                 </select>
                 @error('role') <p class="text-sm text-red-600 mt-1">{{ $message }}</p> @enderror
             </div>

@@ -32,8 +32,13 @@
                             <td class="px-6 py-4 text-sm text-gray-700">{{ ucfirst($request->status) }}</td>
                             <td class="px-6 py-4 text-sm text-gray-700">{{ $request->created_at->format('d.m.Y') }}</td>
                             @if(auth()->user()->role !== 'resident')
-                                <td class="px-6 py-4 text-sm text-gray-700 flex gap-2">
-                                    <a href="{{ route('requests.edit', $request) }}" class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Редактировать</a>
+                                <td class="px-6 py-4 text-sm text-center space-x-2">
+                                    <a href="{{ route('requests.edit', $request->id) }}" class="px-3 py-1 rounded bg-gray-200 hover:bg-gray-300 transition">Редактировать</a>
+                                    <form action="{{ route('request.delete', $request->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600 transition">Удалить</button>
+                                    </form>
                                 </td>
                             @endif
                         </tr>
