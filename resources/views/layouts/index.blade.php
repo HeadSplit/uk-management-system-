@@ -58,7 +58,7 @@
                 <a href="{{route('users')}}" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">👥 Жильцы</a>
             @endif
             @if(auth()->check())
-                    <a href="{{route('houses')}}" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">🏢 Дома</a>
+                <a href="{{route('houses')}}" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">🏠 Дома</a>
                 <a href="{{route('apartments')}}" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">🏢 Квартиры</a>
                 <a href="{{route('invoices')}}" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">📑 Счета</a>
                 <a href="{{route('requests')}}" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition">🛠️ Заявки</a>
