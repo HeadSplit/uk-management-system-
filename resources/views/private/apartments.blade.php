@@ -57,7 +57,7 @@
                                         </form>
                                     @endif
 
-                                    @if($apartment->user_id)
+                                    @if($apartment->user_id || auth()->user()->role == 'admin')
                                         <button class="px-3 py-1 bg-gray-800 text-white rounded hover:bg-gray-700 add-resident-btn"
                                                 data-apartment-id="{{ $apartment->id }}"
                                                 data-residents='@json($apartment->residents ?? [])'>
