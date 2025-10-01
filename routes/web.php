@@ -48,8 +48,6 @@ Route::group([], function() {
         Route::get('/houses', [UserController::class, 'showHouses'])->name('houses');
         Route::get('/apartments', [UserController::class, 'showApartments'])->name('apartments');
         Route::get('/users', [UserController::class, 'showUsers'])->name('users');
-        Route::put('/apartments/{apartment}/users/{user}', [ApartmentController::class, 'detachUser'])
-            ->name('apartments.users.detach');
         Route::post('/apartments/{apartment}/send-metrics', [ApartmentController::class, 'sendMetrics'])
             ->name('apartments.send-metrics');
         Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
