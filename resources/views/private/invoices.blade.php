@@ -26,8 +26,8 @@
                     @foreach($invoices as $invoice)
                         <tr>
                             <td class="px-6 py-4 text-sm text-gray-700">{{ $invoice->id }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-700">{{ $invoice->period }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-700">{{ number_format($invoice->amount, 2, '.', ' ') }} ₽</td>
+                            <td class="px-6 py-4 text-sm text-gray-700">{{ $invoice->period_range }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-700">{{ number_format($invoice->total_amount, 2, '.', ' ') }} ₽</td>
                             <td class="px-6 py-4 text-sm text-gray-700">
                                 @if($invoice->status === 'paid')
                                     <span class="px-2 py-1 bg-green-200 text-green-800 rounded-full text-xs font-semibold">Оплачен</span>
@@ -40,10 +40,23 @@
                                    class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition">
                                     Скачать PDF
                                 </a>
+                                <a href="{{ route('invoices.show', $invoice) }}"
+                                   class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition">
+                                    Посмотреть
+                                </a>
                                 @if(auth()->user()->role == 'employee' || auth()->user()->role == 'admin')
-                                    <a href="{{ route('invoices.delete', $invoice->apartment_id) }}"
+                                    <form action="{{ route('invoices.delete', $invoice) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                                class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition"
+                                                onclick="return confirm('Вы уверены, что хотите удалить этот счет?')">
+                                            Удалить
+                                        </button>
+                                    </form>
+                                    <a href="{{ route('invoices.edit', $invoice) }}"
                                        class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition">
-                                        Удалить
+                                        Редактировать
                                     </a>
                                 @endif
                             </td>

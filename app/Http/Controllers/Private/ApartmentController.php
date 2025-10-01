@@ -6,6 +6,8 @@ use App\Helpers\NotificationHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Apartment;
 use App\Models\House;
+use App\Models\Service;
+use App\Models\User;
 use App\Services\BillingService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,19 +23,24 @@ class ApartmentController extends Controller
 
     public function create(): View
     {
-        return view('private.apartment.create');
+        $houses = House::all();
+        $users = User::all();
+        return view('pages.apartments', compact('houses', 'users'));
     }
 
     public function store(Request $request): RedirectResponse
     {
+        $data = $request->only(['number', 'house_id', 'area', 'entrance', 'floor', 'user_id']);
+        $data['residents'] = [$request->user_id];
+
         try {
-            Apartment::create($request->all());
+            Apartment::create($data);
             NotificationHelper::flash('Квартира успешно создана');
         } catch (\Exception $exception) {
             NotificationHelper::flash('Не удалось создать квартиру', 'error');
         }
 
-        return redirect()->route('apartment.create');
+        return redirect()->route('apartments.create');
     }
 
     public function edit(Apartment $apartment): View
@@ -64,7 +71,7 @@ class ApartmentController extends Controller
             NotificationHelper::flash('Не удалось удалить', 'error');
         }
 
-        return redirect()->route('apartment.index');
+        return redirect()->route('apartments');
     }
 
     public function detachUser(Request $request)
@@ -109,17 +116,20 @@ class ApartmentController extends Controller
 
     public function showSendMetricsForm(Apartment $apartment)
     {
-        return view('pages.metrics', compact('apartment'));
+        $services = Service::all();
+
+        return view('pages.metrics', compact('apartment', 'services'));
     }
 
     public function sendMetrics(Request $request, Apartment $apartment, BillingService $billingService)
     {
-        $consumption = $request->only(['cold_water', 'hot_water', 'electricity']);
         $period = $request->input('period');
+        $consumption = $request->input('services', []);
 
         $billingService->createInvoice($apartment->id, $period, $consumption);
 
         NotificationHelper::flash('Показатели успешно переданы');
         return redirect()->route('invoices');
     }
+
 }

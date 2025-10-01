@@ -30,7 +30,7 @@ class InvoiceController extends Controller
 
     public function show(Invoice $invoice): View
     {
-        $invoice->load('items');
+        $items = $invoice->load('items.service');
         return view('pages.invoices', compact('invoice'));
     }
 
@@ -51,11 +51,11 @@ class InvoiceController extends Controller
             NotificationHelper::flash('Не удалось создать счет: ' . $exception->getMessage(), 'error');
         }
 
-        return redirect()->route('invoices'); 
+        return redirect()->route('invoices');
     }
 
 
-    public function downloadPdf(Invoice $invoice): RedirectResponse
+    public function downloadPdf(Invoice $invoice)
     {
         try {
             return $this->pdfService->downloadInvoice($invoice);
@@ -64,4 +64,59 @@ class InvoiceController extends Controller
             return redirect()->back();
         }
     }
+
+    public function edit(Invoice $invoice): View
+    {
+        try {
+            $invoice->load('items.service', 'apartment.house');
+            return view('edit.invoices', compact('invoice'));
+        } catch (\Exception $exception) {
+            NotificationHelper::flash('Не удалось загрузить счет', 'error');
+            return redirect()->route('invoices');
+        }
+    }
+
+    public function update(Request $request, Invoice $invoice): RedirectResponse
+    {
+        $invoice->load('items.service', 'apartment.house');
+
+        try {
+            $invoice->update([
+                'status' => $request->input('status'),
+            ]);
+
+            if ($request->has('items')) {
+                foreach ($request->input('items') as $itemId => $itemData) {
+                    $invoiceItem = $invoice->items()->find($itemId);
+                    if ($invoiceItem) {
+                        $invoiceItem->update([
+                            'quantity' => $itemData['quantity'],
+                            'amount'   => $itemData['quantity'] * ($invoiceItem->service->price ?? 0),
+                        ]);
+                    }
+                }
+            }
+
+            NotificationHelper::flash('Счет успешно обновлен');
+        } catch (\Exception $exception) {
+            NotificationHelper::flash('Не удалось обновить счет', 'error');
+        }
+
+        return redirect()->route('invoices.show', $invoice);
+    }
+
+
+    public function destroy(Invoice $invoice): RedirectResponse
+    {
+        try {
+            $invoice->delete();
+            NotificationHelper::flash('Счет успешно удален');
+        } catch (\Exception $exception) {
+            NotificationHelper::flash('Не удалось удалить счет', 'error');
+        }
+
+        return redirect()->route('invoices');
+    }
+
 }
+

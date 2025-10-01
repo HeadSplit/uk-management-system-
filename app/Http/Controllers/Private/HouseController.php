@@ -20,7 +20,7 @@ class HouseController extends Controller
 
     public function create(): View
     {
-        return view('private.house.create');
+        return view('pages.houses');
     }
 
     public function store(Request $request): RedirectResponse
@@ -33,7 +33,7 @@ class HouseController extends Controller
             NotificationHelper::flash('Не удалось создать дом', 'error');
         }
 
-        return redirect()->route('house.create');
+        return redirect()->route('houses');
     }
 
     public function edit(House $house): View

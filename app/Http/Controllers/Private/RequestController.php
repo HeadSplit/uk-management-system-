@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Private;
 
 use App\Helpers\NotificationHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Apartment;
 use App\Models\Request as RequestModel;
 use App\Services\RequestService;
 use Illuminate\Http\RedirectResponse;
@@ -27,7 +28,9 @@ class RequestController extends Controller
 
     public function create(): View
     {
-        return view('private.request.create');
+        $apartments = Apartment::all();
+
+        return view('pages.requests', compact('apartments'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -39,12 +42,12 @@ class RequestController extends Controller
             NotificationHelper::flash('Не удалось создать заявку', 'error');
         }
 
-        return redirect()->route('request.create');
+        return redirect()->route('requests');
     }
 
     public function edit(RequestModel $requestModel): View
     {
-        return view('private.request.edit', compact('requestModel'));
+        return view('edit.request', compact('requestModel'));
     }
 
     public function update(Request $request, RequestModel $requestModel): RedirectResponse
@@ -56,7 +59,12 @@ class RequestController extends Controller
             NotificationHelper::flash('Не удалось обновить заявку', 'error');
         }
 
-        return redirect()->route('request.edit', $requestModel->id);
+        return redirect()->route('requests.edit', $requestModel->id);
+    }
+
+    public function show( RequestModel $request): View
+    {
+        return view('pages.request', compact('request'));
     }
 
     public function assignToEmployee(int $requestId, int $employeeId): RedirectResponse
@@ -80,6 +88,6 @@ class RequestController extends Controller
             NotificationHelper::flash('Не удалось удалить заявку', 'error');
         }
 
-        return redirect()->route('request.index');
+        return redirect()->route('requests');
     }
 }

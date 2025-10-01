@@ -19,7 +19,7 @@ class ServiceController extends Controller
 
     public function create(): View
     {
-        return view('private.service.create');
+        return view('private.services');
     }
 
     public function store(Request $request): RedirectResponse
@@ -31,7 +31,24 @@ class ServiceController extends Controller
             NotificationHelper::flash('Не удалось добавить', 'error');
         }
 
-        return redirect()->route('service.create');
+        return redirect()->route('services');
+    }
+
+    public function edit(Service $service): View
+    {
+        return view('edit.services', compact('service'));
+    }
+
+    public function update(Request $request, Service $service): RedirectResponse
+    {
+        try {
+            $service->update($request->all());
+            NotificationHelper::flash('Услуга успешно обновлена');
+        }
+        catch (\Exception $exception) {
+            NotificationHelper::flash('Не удалось обновить услугу', 'error');
+        }
+        return redirect()->route('services');
     }
 
     public function destroy(Service $service): RedirectResponse
@@ -43,6 +60,6 @@ class ServiceController extends Controller
             NotificationHelper::flash('Не удалось удалить', 'error');
         }
 
-        return redirect()->route('service.index');
+        return redirect()->route('services');
     }
 }

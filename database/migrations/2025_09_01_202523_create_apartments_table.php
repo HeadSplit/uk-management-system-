@@ -23,6 +23,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
+            $table->integer('floor');
             $table->integer('number');
             $table->decimal('area', 8, 2);
             $table->timestamps();
@@ -34,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('apartaments');
+        Schema::dropIfExists('apartments');
     }
 };

@@ -24,7 +24,6 @@ class BillingService
         $apartment = Apartment::findOrFail($apartmentId);
 
         return DB::transaction(function () use ($apartment, $period, $consumption) {
-
             $invoice = Invoice::create([
                 'apartment_id' => $apartment->id,
                 'period' => $period,
@@ -34,19 +33,13 @@ class BillingService
 
             $total = 0;
 
-            $services = [
-                'cold_water' => $consumption['cold_water'] ?? 0,
-                'hot_water' => $consumption['hot_water'] ?? 0,
-                'electricity' => $consumption['electricity'] ?? 0,
-                'heating' => $apartment->area ?? 0,
-                'garbage' => 1,
-                'maintenance' => 1,
-            ];
+            foreach ($consumption as $serviceId => $quantity) {
+                $service = Service::find($serviceId);
+                if (!$service) {
+                    continue;
+                }
 
-            foreach ($services as $serviceKey => $quantity) {
-                $service = Service::where('key', $serviceKey)->first();
-                if (!$service) continue;
-                $amount = $quantity * $service->tariff;
+                $amount = ($quantity ?: 0) * $service->price;
 
                 InvoiceItem::create([
                     'invoice_id' => $invoice->id,
@@ -63,4 +56,5 @@ class BillingService
             return $invoice;
         });
     }
+
 }

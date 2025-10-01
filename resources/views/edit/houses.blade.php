@@ -12,12 +12,22 @@
 
             <div>
                 <label class="block text-sm text-gray-700 mb-1">Название дома</label>
-                <input type="text" name="name" value="{{ $house->name }}" class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-gray-300" required>
+                <input type="text" name="name" value="{{ old('name', $house->name) }}" class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-gray-300" required>
             </div>
 
             <div>
                 <label class="block text-sm text-gray-700 mb-1">Адрес</label>
-                <input type="text" name="address" value="{{ $house->address }}" class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-gray-300" required>
+                <input type="text" name="address" value="{{ old('address', $house->address) }}" class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-gray-300" required>
+            </div>
+
+            <div>
+                <label class="block text-sm text-gray-700 mb-1">Количество подъездов</label>
+                <input type="number" name="entrances" value="{{ old('entrances', $house->entrances) }}" min="1" class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-gray-300" required>
+            </div>
+
+            <div>
+                <label class="block text-sm text-gray-700 mb-1">Количество этажей</label>
+                <input type="number" name="floors" value="{{ old('floors', $house->floors) }}" min="1" class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-gray-300" required>
             </div>
 
             <div class="flex justify-end gap-2 mt-4">

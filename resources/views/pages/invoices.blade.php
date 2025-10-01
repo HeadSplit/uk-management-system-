@@ -12,7 +12,7 @@
                 <p><strong>Дом:</strong> {{ $invoice->apartment->house->name ?? '-' }}</p>
             </div>
             <div>
-                <p><strong>Период:</strong> {{ $invoice->period }}</p>
+                <p><strong>Период:</strong> {{ ($invoice->getPeriodText($invoice->created_at))}}</p>
                 <p>
                     <strong>Статус:</strong>
                     @if($invoice->status === 'paid')
@@ -40,11 +40,12 @@
                     <tbody class="divide-y divide-gray-200">
                     @foreach($invoice->items as $item)
                         <tr>
-                            <td class="px-6 py-4 text-sm text-gray-700">{{ $item->name }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-700">{{ $item->quantity ?? 1 }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-700">{{ number_format($item->amount, 2, '.', ' ') }} ₽</td>
+                            <td>{{ $item->service->name ?? '-' }}</td>
+                            <td>{{ $item->quantity ?? 1 }} {{ $item->service->unit ?? '' }}</td>
+                            <td>{{ number_format($item->amount, 2, '.', ' ') }} ₽</td>
                         </tr>
                     @endforeach
+
                     <tr class="font-semibold bg-gray-50">
                         <td class="px-6 py-4 text-sm text-gray-700">Итого</td>
                         <td></td>

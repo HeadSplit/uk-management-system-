@@ -31,8 +31,8 @@
                 @forelse($unpaidInvoices as $invoice)
                     <tr class="hover:bg-gray-50">
                         <td class="border p-3">{{ $invoice->id }}</td>
-                        <td class="border p-3">{{ $invoice->period }}</td>
-                        <td class="border p-3 font-medium">{{ number_format($invoice->amount, 2, ',', ' ') }} ₽</td>
+                        <td class="border p-3">{{ ($invoice->getPeriodText($invoice->created_at))}}</td>
+                        <td class="border p-3 font-medium">{{ number_format($invoice->total_amount, 2, ',', ' ') }} ₽</td>
                         <td class="border p-3">
                                 <span class="px-2 py-1 rounded-lg text-sm
                                     {{ $invoice->status === 'unpaid' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600' }}">
@@ -69,8 +69,8 @@
                 @forelse($paidInvoices as $invoice)
                     <tr class="hover:bg-gray-50">
                         <td class="border p-3">{{ $invoice->id }}</td>
-                        <td class="border p-3">{{ $invoice->period }}</td>
-                        <td class="border p-3 font-medium">{{ number_format($invoice->amount, 2, ',', ' ') }} ₽</td>
+                        <td class="border p-3">{{ ($invoice->getPeriodText($invoice->created_at))}}}</td>
+                        <td class="border p-3 font-medium">{{ number_format($invoice->total_amount, 2, ',', ' ') }} ₽</td>
                         <td class="border p-3">{{ $invoice->paid_at?->format('d.m.Y H:i') }}</td>
                     </tr>
                 @empty

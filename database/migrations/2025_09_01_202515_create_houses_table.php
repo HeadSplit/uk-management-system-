@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('address');
-            $table->string('entrances');
-            $table->string('floor');
+            $table->tinyInteger('entrances');
+            $table->tinyInteger('floors');
             $table->timestamps();
         });
     }

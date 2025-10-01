@@ -10,7 +10,9 @@
 <!-- Шапка -->
 <header class="bg-white/90 backdrop-blur-md border-b shadow-sm">
     <div class="container mx-auto flex justify-between items-center py-4 px-6">
-        <h1 class="text-2xl font-bold tracking-wide text-gray-700">УК "Комфорт"</h1>
+        <a href="{{route('index')}}">
+            <h1 class="text-2xl font-bold tracking-wide text-gray-700">УК "Комфорт"</h1>
+        </a>
         <div class="space-x-4 flex items-center">
             <a href="{{ route('index') }}" class="hover:text-gray-600 transition">Главная</a>
             <a href="#" class="hover:text-gray-600 transition">О компании</a>

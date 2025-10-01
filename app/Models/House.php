@@ -13,6 +13,8 @@ class House extends Model
     protected $fillable = [
         'name',
         'address',
+        'entrances',
+        'floors'
     ];
 
     public function apartments(): HasMany
